@@ -3,11 +3,15 @@ import viteLogo from "/vite.svg";
 
 import { useSelector, useDispatch } from "react-redux";
 import { decrement, increment } from "./counter";
+import { RootState } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../hook";
 
 function App() {
-	const count = useSelector((state: any) => state.counter.value);
-	const dispatch = useDispatch();
-
+	//const counter = useSelector((state: RootState) => state.value);
+	//const dispatch = useDispatch();
+	const count = useAppSelector(state => state.counter.value)
+	const dispatch = useAppDispatch()
+	
 	return (
 		<div>
 			<div>
