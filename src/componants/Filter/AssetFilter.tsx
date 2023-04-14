@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import FilterBouton from "../features/filter/FilterBouton";
+import FilterBouton from "../../features/filter/FilterBouton";
 import { AiOutlineDoubleRight } from "react-icons/ai";
+import "./AssetFilter.scss";
 
 const AssetFilter: React.FC = () => {
 	const [isPanelOpen, setIsPanelOpen] = useState(false);

@@ -8,6 +8,13 @@ export const useAxiosApiCommune = () => {
 	});
 };
 
+export const useAxiosApiGouvCommune = () => {
+	return axios.create({
+		baseURL: "https://geo.api.gouv.fr/",
+		responseType: "json",
+	});
+};
+
 export const testEnum = (name_table: enumNameTable): boolean => {
 	return Object.values(enumNameTable).includes(name_table);
 };

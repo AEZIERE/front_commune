@@ -1,3 +1,3 @@
-import ChoixFilter from "./ChoixFilter";
+import HomePage from "./HomePage";
 
-export default ChoixFilter;
+export default HomePage;

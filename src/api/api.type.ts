@@ -41,3 +41,28 @@ export type GetEntity = {
 		organisme_formation: {};
 	};
 };
+
+export type GetMailleDepartement = {
+	nom: string;
+	code: string;
+	_score: number;
+	region: {
+		code: string;
+		nom: string;
+	};
+};
+export type GetMailleCommune = {
+	nom: string;
+	code: string;
+	_score: number;
+	departement: {
+		code: string;
+		nom: string;
+	};
+};
+
+export type GetMailleBasic = {
+	nom: string;
+	code: string;
+	_score: number;
+};
