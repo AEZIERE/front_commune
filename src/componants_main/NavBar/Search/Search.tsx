@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { userGetCommunes, userGetDepartements, userGetRegion } from "../../api/maille";
-import { GetMailleBasic, GetMailleCommune, GetMailleDepartement } from "../../api/api.type";
+import { userGetCommunes, userGetDepartements, userGetRegion } from "../../../api/maille";
+import { GetMailleBasic, GetMailleCommune, GetMailleDepartement } from "../../../api/api.type";
 import { useDebounce } from "react-use";
-import "./AssetSearch.scss";
+import "./Search.scss";
 
-const AssetSearch = () => {
+const Search = () => {
 	const [state, setState] = React.useState("Typing stopped");
 	const [val, setVal] = React.useState("");
 	const [debouncedValue, setDebouncedValue] = React.useState("");
@@ -85,4 +85,4 @@ const AssetSearch = () => {
 	);
 };
 
-export default AssetSearch;
+export default Search;

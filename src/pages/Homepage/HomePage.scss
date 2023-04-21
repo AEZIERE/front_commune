@@ -1,0 +1,68 @@
+#navBar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: 15%;
+	background-color: white;
+	color: black;
+	div {
+		h1 {
+			font-size: 3em;
+		}
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+}
+#content {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 75%;
+	background-color: #954545;
+
+	#sideBarLeft {
+		position: absolute;
+		z-index: 999;
+		top: 25%;
+		left: 5%;
+		width: 10em;
+		height: 30em;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+	}
+	#sideBarRight {
+		z-index: 999;
+		width: 30%;
+		height: 100%;
+		background-color: yellow;
+	}
+	#map {
+		background-color: rgb(26, 145, 210);
+		width: 100%;
+		height: 100%;
+	}
+}
+
+#footerBar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: 10%;
+	background-color: white;
+	color: black;
+	div {
+		h1 {
+			font-size: 3em;
+		}
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+}

@@ -14,11 +14,9 @@ const FilterBouton: React.FC<FilterBoutonProps> = ({ name }) => {
 	};
 
 	return (
-		<div>
-			<button id={name} onClick={handleClick}>
-				{name}
-			</button>
-		</div>
+		<button id={name} onClick={handleClick}>
+			{name}
+		</button>
 	);
 };
 

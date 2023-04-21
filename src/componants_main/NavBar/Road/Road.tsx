@@ -1,7 +1,7 @@
 import React from "react";
-import { add, remove_one_last, remove_all_last } from "../../features/road/road";
-import { useAppDispatch, useAppSelector } from "../../hook";
-const AssetRoad = () => {
+import { add, remove_one_last, remove_all_last } from "../../../redux/road/road";
+import { useAppDispatch, useAppSelector } from "../../../hook";
+const Road = () => {
 	const list = useAppSelector((state) => state.road.value);
 	const dispatch = useAppDispatch();
 
@@ -17,4 +17,4 @@ const AssetRoad = () => {
 	);
 };
 
-export default AssetRoad;
+export default Road;
