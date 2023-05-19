@@ -2,14 +2,15 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { filterSlice } from "./redux/filter/filter";
-import { roadSlice } from "./redux/road/road";
+
 import { mailleSelectSlice } from "./redux/MailleSelect/mailleSelect";
+import { mapStateSlice } from "./redux/mapState/mapState";
 
 // Combine les reducers en un seul
 const rootReducer = combineReducers({
 	filter: filterSlice.reducer,
-	road: roadSlice.reducer,
 	mailleSelect: mailleSelectSlice.reducer,
+	mapState: mapStateSlice.reducer,
 });
 
 const persistConfig = {

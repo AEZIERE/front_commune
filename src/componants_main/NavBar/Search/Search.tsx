@@ -1,18 +1,30 @@
 import React, { useEffect } from "react";
-import { userGetCommunes, userGetDepartements, userGetRegion } from "../../../api/maille";
+import { useGetCommunes, useGetDepartements, useGetRegion } from "../../../api/maille";
 import { GetMailleBasic, GetMailleCommune, GetMailleDepartement } from "../../../api/api.type";
 import { useDebounce } from "react-use";
 import "./Search.scss";
+import { useAppDispatch } from "../../../hook";
 
 const Search = () => {
+	const dispatch = useAppDispatch();
+
 	const [state, setState] = React.useState("Typing stopped");
 	const [val, setVal] = React.useState("");
 	const [debouncedValue, setDebouncedValue] = React.useState("");
 
 	//Cal API gouv for search
-	const data_commun = userGetCommunes(debouncedValue);
-	const data_departement = userGetDepartements(debouncedValue);
-	const data_region = userGetRegion(debouncedValue);
+	const data_commun = useGetCommunes({
+		valueInput: debouncedValue,
+		isEnabled: debouncedValue !== "" && debouncedValue !== "France",
+	});
+	const data_departement = useGetDepartements({
+		valueInput: debouncedValue,
+		isEnabled: debouncedValue !== "" && debouncedValue !== "France",
+	});
+	const data_region = useGetRegion({
+		valueInput: debouncedValue,
+		isEnabled: debouncedValue !== "" && debouncedValue !== "France",
+	});
 
 	const className = `searchInput ${debouncedValue !== "" ? "active" : "inactive"}`;
 
@@ -20,6 +32,7 @@ const Search = () => {
 		() => {
 			setState("Typing stopped");
 			setDebouncedValue(val);
+			console.log("debouncedValue", debouncedValue);
 		},
 		1000,
 		[val]
@@ -28,14 +41,18 @@ const Search = () => {
 	const trieData = () => {
 		let data: any[] = [];
 		let response: any[] = [];
+
 		if (data_commun.data !== undefined) {
 			data_commun.data.map((item) => {
+				item.niveau = "commune";
+
 				data.push(item);
 			});
 		}
 		if (data.length < 5) {
 			if (data_departement.data !== undefined) {
 				data_departement.data.map((item) => {
+					item.niveau = "departement";
 					data.push(item);
 				});
 			}
@@ -43,30 +60,48 @@ const Search = () => {
 		if (data.length < 5) {
 			if (data_region.data !== undefined) {
 				data_region.data.map((item: any) => {
+					item.niveau = "region";
 					data.push(item);
 				});
 			}
 		}
+		let list = data.slice(0, 5);
+		if (
+			val in ["France", "france", "FRANCE", "Fr", "fr", "FR", "Fra", "fra", "FRA"] ||
+			val.includes("Fra") ||
+			val.includes("fra") ||
+			val.includes("FRA")
+		) {
+			list.push({ nom: "France", code: "", niveau: "nation" });
+		}
+		return list;
+	};
 
-		return data.slice(0, 5);
+	const handleOnClick = (item: any) => {
+		setVal(item.nom + " " + item.code);
+		dispatch({ type: "mapState/setSelectedZone", payload: { name: item.nom, code: item.code, level: item.niveau } });
+		dispatch({ type: "mapState/setCurrentZone", payload: { name: item.nom, code: item.code, level: item.niveau } });
 	};
 
 	return (
 		<div className={className}>
-			<input
-				type="search"
-				value={val}
-				placeholder="Saisir une adresse.."
-				onChange={({ currentTarget }) => {
-					setState("Waiting for typing to stop...");
-					setVal(currentTarget.value);
-				}}
-			/>
-			{debouncedValue !== "" && (
+			<div className="top">
+				<input
+					type="search"
+					value={val}
+					placeholder="Saisir une adresse.."
+					onChange={({ currentTarget }) => {
+						setState("Waiting for typing to stop...");
+						setVal(currentTarget.value);
+					}}
+				/>
+				<span className="clear-icon" onClick={() => setVal("")}></span>
+			</div>
+			{debouncedValue !== "" && val !== "" && (
 				<div className="suggestion">
 					{trieData().map((item: any) => {
 						return (
-							<span key={item.code}>
+							<span key={item.code} onClick={() => handleOnClick(item)}>
 								<p>
 									{item.nom} {item.code}
 								</p>

@@ -1,11 +1,12 @@
 import React from "react";
 import "./HomePage.scss";
-import { enumNameTable, testEnum } from "../../api/utils";
-import { userGetData } from "../../api/data";
 import SideBarFilter from "./componants/SideBarFilter/sideBarFilter";
-import Map from "./componants/Map/Map";
+import Map from "./componants/Map/MapReact";
 import NavBar from "../../componants_main/NavBar/NavBar";
-import { AiOutlineDoubleRight } from "react-icons/ai";
+import SwitchPages from "../../componants_main/switchPages";
+import BarChart from "../../componants_main/Chart/createChart";
+import SideBarInfo from "./componants/SideBarInfo/SideBarInfo";
+import SelectedButton from "./componants/SelectedButton";
 
 const HomePage = () => {
 	return (
@@ -13,8 +14,10 @@ const HomePage = () => {
 			<NavBar />
 			<div id="content">
 				<SideBarFilter />
+				<SwitchPages />
 				<Map />
-				<div id="sideBarRight">SideBarRight{/* Companante Info/Chart */}</div>
+				<SelectedButton />
+				<SideBarInfo />
 			</div>
 			<div id="footerBar">
 				<div>FooterBar</div>

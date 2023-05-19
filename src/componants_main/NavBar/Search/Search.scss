@@ -1,29 +1,52 @@
 .searchInput {
-	input {
-		background-color: white;
-		margin: 0;
-		color: black;
-		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
-		padding: 1.5em 2em;
-		height: 4em;
-		width: 20em;
-		border: none;
-		border-radius: 3em;
-		font-size: 20px;
-		outline: none;
-		z-index: 666;
+	display: flex;
+	flex-direction: column;
+	> div.top {
+		display: flex;
+		align-items: center;
+
+		input {
+			background-color: white;
+			margin: 0;
+			color: black;
+			box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+			padding: 1.5em 2em;
+			height: 4em;
+			width: 20em;
+			border: none;
+			border-radius: 3em;
+			font-size: 20px;
+			outline: none;
+			z-index: 1000;
+		}
+		.clear-icon {
+			width: 3em;
+			height: 3em;
+			position: relative;
+			right: 3.5em;
+			z-index: 1000;
+
+			cursor: pointer;
+			font-size: 20px;
+			background-image: url(https://img.icons8.com/ios-filled/50/000000/cancel.png);
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+		.clear-icon:hover {
+			background-image: url(https://img.icons8.com/ios-filled/50/339AF0/cancel.png);
+		}
 	}
 
 	.suggestion {
 		position: absolute;
-		top: 7em;
 		width: 21em;
-
+		top: 6.3em;
+		margin: 0 0 0 1.8em;
+		z-index: 999;
 		color: black;
 		background-color: white;
 		box-shadow: 0px 2px 5px 4px rgba(0, 0, 0, 0.2);
-		border-radius: 0 0 0.8em 0.8em;
-		z-index: 0;
+		border-radius: 0.8em;
 
 		span {
 			width: 100%;

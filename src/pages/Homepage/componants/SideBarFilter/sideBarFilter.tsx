@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import FilterBouton from "../../../../redux/filter/FilterBouton";
+import FilterBouton from "./FilterBouton";
 import { AiOutlineDoubleRight } from "react-icons/ai";
 import "./sideBarFilter.scss";
 import { useAppDispatch } from "../../../../hook";
 import { add, remove } from "../../../../redux/filter/filter";
 
-const AssetFilter: React.FC = () => {
+const SideBarFilter: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const [isPanelOpen, setIsPanelOpen] = useState(false);
 
 	const className = `list_button${isPanelOpen ? "--expanded" : ""}`;
 
-	const list_bouton = ["induscrtie", "industrie", "industrie", "industrie", "industrie", "industrie", "industrie"];
+	const list_bouton = ["industie", "education", "demographie", "e", "industrie", "industrie", "industrie"];
 
 	const handlePanelToggle = () => {
 		setIsPanelOpen(!isPanelOpen);
@@ -31,4 +31,4 @@ const AssetFilter: React.FC = () => {
 	);
 };
 
-export default AssetFilter;
+export default SideBarFilter;

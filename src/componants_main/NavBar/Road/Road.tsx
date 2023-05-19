@@ -1,17 +1,31 @@
-import React from "react";
-import { add, remove_one_last, remove_all_last } from "../../../redux/road/road";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hook";
+import { useGetMaillesLevels } from "../../../api/maillage";
 const Road = () => {
-	const list = useAppSelector((state) => state.road.value);
+	const { selectedZone, currentZone } = useAppSelector((state) => state.mapState);
 	const dispatch = useAppDispatch();
 
-	const handleClick = (item: string) => {
-		dispatch(remove_all_last(item));
+	const [list, setList] = React.useState<{ name: string; code: string; level: string }[]>([]);
+
+	const infoMailles = useGetMaillesLevels({
+		maille: currentZone.level,
+		code: currentZone.code,
+		isEnabled: true,
+	});
+	useEffect(() => {
+		if (!infoMailles) return;
+		setList([...list, { name: "France", code: "", level: "nation" }]);
+	}, []);
+
+	const handleClick = (item) => {
+		console.log(item);
 	};
 	return (
 		<div id="road">
 			{list.map((item) => (
-				<span onClick={() => handleClick(item)}> - {item}</span>
+				<span>
+					{">"} {item.name} {item.code} {item.level}
+				</span>
 			))}
 		</div>
 	);

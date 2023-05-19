@@ -1,8 +1,10 @@
 import React from "react";
-import Road from "./Road/Road";
-import Search from "./Search/Search";
+import Road from "../NavBar/Road/Road";
+import Search from "../NavBar/Search/Search";
+import "./NavBar.scss";
+import { useAppDispatch } from "../../hook";
 
-const navBar = () => {
+const NavBar = () => {
 	return (
 		<div id="navBar">
 			<div>
@@ -16,4 +18,4 @@ const navBar = () => {
 	);
 };
 
-export default navBar;
+export default NavBar;

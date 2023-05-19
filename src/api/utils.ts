@@ -1,9 +1,8 @@
 import axios from "axios";
-const baseApi: string = import.meta.env.VITE_API;
 
 export const useAxiosApiCommune = () => {
 	return axios.create({
-		baseURL: baseApi,
+		baseURL: import.meta.env.VITE_API_COMMUNE,
 		responseType: "json",
 	});
 };
@@ -11,6 +10,13 @@ export const useAxiosApiCommune = () => {
 export const useAxiosApiGouvCommune = () => {
 	return axios.create({
 		baseURL: "https://geo.api.gouv.fr/",
+		responseType: "json",
+	});
+};
+
+export const useAxiosMaille = () => {
+	return axios.create({
+		baseURL: import.meta.env.VITE_API_MAILLAGE,
 		responseType: "json",
 	});
 };

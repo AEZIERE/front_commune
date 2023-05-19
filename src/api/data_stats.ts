@@ -2,17 +2,17 @@ import { useQuery } from "react-query";
 import { useAxiosApiCommune } from "./utils";
 import { GetGeo } from "./api.type";
 
-export const userGetDataStats = (code_commune: string) => {
+export const useGetDataStats = (code_commune: string) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetGeo[]>(["userGetDataStats", code_commune], async () => {
+	return useQuery<GetGeo[]>(["useGetDataStats", code_commune], async () => {
 		const { data } = await api.get(`data/${code_commune}`);
 		return data;
 	});
 };
 
-export const userPostDataStats = (code_communes: string[]) => {
+export const usePostDataStats = (code_communes: string[]) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetGeo[]>(["userPostDataStats", code_communes], async () => {
+	return useQuery<GetGeo[]>(["usePostDataStats", code_communes], async () => {
 		const { data } = await api.post(`data/`, { code_commune: code_communes });
 		return data;
 	});

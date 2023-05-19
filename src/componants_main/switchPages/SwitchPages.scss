@@ -1,0 +1,23 @@
+#SwitchPages {
+	div {
+		margin-left: 0.25em;
+		margin-right: 0.25em;
+		button {
+			border: none;
+			background-color: #ffffff;
+			border-radius: 5px;
+			box-sizing: border-box;
+			color: #222222;
+			cursor: pointer;
+			padding: 10px 20px;
+			box-shadow: 1px 1px 12px #555;
+		}
+
+		button:active {
+			background-color: #117fcd;
+			color: #ffffff;
+			border: none;
+			transform: scale(0.96);
+		}
+	}
+}

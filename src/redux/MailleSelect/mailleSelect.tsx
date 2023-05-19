@@ -1,10 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { ControleMaille } from "../../api/api.type";
 
 interface MailleSelectState {
-	value: { name: string; code: string; level: string };
+	value: { name: string; code: string; level: ControleMaille };
 }
 const initialState: MailleSelectState = {
-	value: { name: "", code: "", level: "" },
+	value: { name: "", code: "", level: ControleMaille.region },
 };
 
 export const mailleSelectSlice = createSlice({
@@ -12,7 +13,7 @@ export const mailleSelectSlice = createSlice({
 	initialState,
 	reducers: {
 		add: (state, action: PayloadAction<MailleSelectState>) => {
-			state.value = action.payload.value;
+			state.value = action.payload;
 		},
 		remove: (state) => {
 			state.value = { name: "", code: "", level: "" };

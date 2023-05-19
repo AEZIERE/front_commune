@@ -1,6 +1,6 @@
 import React from "react";
-import { useAppDispatch } from "../../hook";
-import { add } from "./filter";
+import { useAppDispatch } from "../../../../hook";
+import { add } from "../../../../redux/filter/filter";
 
 interface FilterBoutonProps {
 	name: string;
