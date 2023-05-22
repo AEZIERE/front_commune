@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hook";
 import { useGetMaillesLevels } from "../../../api/maillage";
 import { info } from "sass";
+import "./Road.scss";
 const Road = () => {
 	// TODO : add les maille inf  pour selecter sans la map
 	const { selectedZone, currentZone } = useAppSelector((state) => state.mapState);
@@ -50,7 +51,7 @@ const Road = () => {
 		<div id="road">
 			{list.map((item) => (
 				<span className={item.level === currentZone.level ? "IsLevel" : ""}>
-					{" >"} {item.name} {item.code} {item.level}
+					{" - "} {item.name} {item.code} {item.level}
 				</span>
 			))}
 		</div>
