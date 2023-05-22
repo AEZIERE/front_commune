@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hook";
-import { useGetMaillesLevels } from "../../../api/maillage";
+import { useGetAllMaillesLevels } from "../../../api/maillage";
 import { info } from "sass";
 import "./Road.scss";
 const Road = () => {
 	// TODO : add les maille inf  pour selecter sans la map
+	// TODO : add action onClick pour changer la maille selectioner
 	const { selectedZone, currentZone } = useAppSelector((state) => state.mapState);
 	const dispatch = useAppDispatch();
 
-	const [list, setList] = React.useState<{ name: string; code: string; level: string }[]>([]);
+	const [list, setList] = React.useState<{ nom: string; code: string; level: string }[]>([]);
 
-	const infoMailles = useGetMaillesLevels({
+	const infoMailles = useGetAllMaillesLevels({
 		maille: currentZone.level,
 		code: currentZone.code,
 		isEnabled: true && currentZone.code !== "",
@@ -18,40 +19,41 @@ const Road = () => {
 	useEffect(() => {
 		if (!infoMailles || infoMailles.isLoading) return;
 		if (currentZone.code === "" && currentZone.level === "nation")
-			setList([{ name: "France", code: "", level: "nation" }]);
+			setList([{ nom: "France", code: "", level: "nation" }]);
 		else if (currentZone.level === "region") {
 			setList([
-				{ name: "France", code: "", level: "nation" },
-				{ name: infoMailles.data?.libelleRegion, code: infoMailles.data?.codeRegion, level: "region" },
+				{ nom: "France", code: "", level: "nation" },
+				{ nom: infoMailles.data?.libelleRegion, code: infoMailles.data?.codeRegion, level: "region" },
 			]);
 		} else if (currentZone.level === "departement") {
 			console.log(infoMailles.data);
 
 			setList([
-				{ name: "France", code: "", level: "nation" },
-				{ name: infoMailles.data?.libelleRegion, code: infoMailles.data?.codeRegion, level: "region" },
-				{ name: infoMailles.data?.libelleDept, code: infoMailles.data?.codeDept, level: "departement" },
+				{ nom: "France", code: "", level: "nation" },
+				{ nom: infoMailles.data?.libelleRegion, code: infoMailles.data?.codeRegion, level: "region" },
+				{ nom: infoMailles.data?.libelleDept, code: infoMailles.data?.codeDept, level: "departement" },
 			]);
 		} else if (currentZone.level === "commune") {
 			setList([
-				{ name: "France", code: "", level: "nation" },
-				{ name: infoMailles.data?.libelleRegion, code: infoMailles.data?.codeRegion, level: "region" },
-				{ name: infoMailles.data?.libelleDept, code: infoMailles.data?.codeDept, level: "departement" },
-				{ name: infoMailles.data?.libelleCommune, code: infoMailles.data?.codeCommune, level: "commune" },
+				{ nom: "France", code: "", level: "nation" },
+				{ nom: infoMailles.data?.libelleRegion, code: infoMailles.data?.codeRegion, level: "region" },
+				{ nom: infoMailles.data?.libelleDept, code: infoMailles.data?.codeDept, level: "departement" },
+				{ nom: infoMailles.data?.libelleCommune, code: infoMailles.data?.codeCommune, level: "commune" },
 			]);
 		}
 
 		console.log(infoMailles);
 	}, [infoMailles.data, currentZone]);
 
-	const handleClick = (item) => {
-		console.log(item);
+	const handleClick = (item: { nom: string; code: string; level: string }) => {
+		dispatch({ type: "mapState/setCurrentZone", payload: { name: item.nom, code: item.code, level: item.level } });
 	};
+
 	return (
 		<div id="road">
 			{list.map((item) => (
-				<span className={item.level === currentZone.level ? "IsLevel" : ""}>
-					{" - "} {item.name} {item.code} {item.level}
+				<span onClick={() => handleClick(item)} className={item.level === currentZone.level ? "IsLevel" : ""}>
+					{" - "} {item.nom} {item.code} {item.level}
 				</span>
 			))}
 		</div>

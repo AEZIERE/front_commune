@@ -10,12 +10,24 @@ export const useGetDataScolaire = (code_commune: string) => {
 	});
 };
 
-export const usePostDataScolaire = (code_communes: string[]) => {
+export const usePostDataScolaire = ({
+	code_communes,
+	isEnable = true,
+}: {
+	code_communes: string[];
+	isEnable: boolean;
+}) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetScolaire[]>(["usePostDataScolaire", code_communes], async () => {
-		const { data } = await api.post(`data_scolaire/`, { code_commune: code_communes });
-		return data;
-	});
+	return useQuery<GetScolaire[]>(
+		["usePostDataScolaire", code_communes],
+		async () => {
+			const { data } = await api.post(`data_scolaire/`, { code_commune: code_communes });
+			return data;
+		},
+		{
+			enabled: isEnable,
+		}
+	);
 };
 
 export const useGetDataScolairePro = (code_commune: string) => {
