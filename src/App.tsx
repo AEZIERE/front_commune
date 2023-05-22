@@ -10,7 +10,7 @@ function App() {
 			path: "/",
 			children: [
 				{
-					path: "home",
+					path: "map",
 					element: <Homepage />,
 				},
 				{
