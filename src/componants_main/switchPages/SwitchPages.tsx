@@ -11,7 +11,7 @@ const SwitchPages = () => {
 	return (
 		<div id="SwitchPages">
 			<div>
-				<button onClick={() => handleClick("home")} name="home">
+				<button onClick={() => handleClick("map")} name="map">
 					Map
 				</button>
 			</div>

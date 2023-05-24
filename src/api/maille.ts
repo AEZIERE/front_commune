@@ -2,8 +2,6 @@ import { useQuery } from "react-query";
 import { useAxiosApiGouvCommune } from "./utils";
 import { GetMailleBasic, GetMailleCommune, GetMailleDepartement, GetShapeBasic, GetMailleProps } from "./api.type";
 
-
-
 export const useGetCommunes = ({ valueInput, isEnabled = true }: GetMailleProps) => {
 	const api = useAxiosApiGouvCommune();
 	return useQuery<GetMailleCommune[]>(
@@ -53,34 +51,36 @@ export const useGetShapeCommunes = (name_commune: string) => {
 	});
 };
 
-export const useGetDepartementsOfRegion = (code_region: string) => {
+export const useGetDepartementsOfRegion = ({ code_region, isEnable }: { code_region: string; isEnable: boolean }) => {
 	const api = useAxiosApiGouvCommune();
-	return useQuery<[]>(["useGetCommune", code_region], async () => {
-		const { data } = await api.get(`https://geo.api.gouv.fr/regions/${code_region}/departements`);
-		return data;
-	});
+	return useQuery<[]>(
+		["useGetCommune", code_region],
+		async () => {
+			const { data } = await api.get(`https://geo.api.gouv.fr/regions/${code_region}/departements`);
+			return data;
+		},
+		{
+			enabled: isEnable,
+		}
+	);
 };
 
-export const useGetCommuneOfDepartement = (code_departement: string) => {
+export const useGetCommuneOfDepartement = ({
+	code_departement,
+	isEnable,
+}: {
+	code_departement: string;
+	isEnable: boolean;
+}) => {
 	const api = useAxiosApiGouvCommune();
-	return useQuery<object[]>(["useGetCommune", code_departement], async () => {
-		const { data } = await api.get(`https://geo.api.gouv.fr/departments/${code_departement}/communes`);
-		return data;
-	});
-};
-
-export const useGetCommuneOfRegion = (code_region: string) => {
-	const api = useAxiosApiGouvCommune();
-	return useQuery<object[]>(["useGetCommune", code_region], async () => {
-		var communes: object[] = [];
-		const res = useGetDepartementsOfRegion(code_region);
-		res.data?.forEach((res: any) => {
-			res.map((departement: any) => {
-				api
-					.get(`https://geo.api.gouv.fr/departments/${departement.code}/communes`)
-					.then((res: any) => res.data.map((commune: any) => communes.push(commune)));
-			});
-		});
-		return communes;
-	});
+	return useQuery<object[]>(
+		["useGetCommune", code_departement],
+		async () => {
+			const { data } = await api.get(`https://geo.api.gouv.fr/departements/${code_departement}/communes`);
+			return data;
+		},
+		{
+			enabled: isEnable,
+		}
+	);
 };

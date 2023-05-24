@@ -10,10 +10,16 @@ export const useGetEntity = (code_commune: string) => {
 	});
 };
 
-export const usePostEntity = (code_communes: string[]) => {
+export const usePostEntity = ({ code_communes, isEnable = true }: { code_communes: string[]; isEnable: boolean }) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetEntity[]>(["usePostEntity", code_communes], async () => {
-		const { data } = await api.post(`data_entity/`, { code_commune: code_communes });
-		return data;
-	});
+	return useQuery<GetEntity[]>(
+		["usePostEntity", code_communes],
+		async () => {
+			const { data } = await api.post(`data_entity/`, { code_commune: code_communes });
+			return data;
+		},
+		{
+			enabled: isEnable,
+		}
+	);
 };

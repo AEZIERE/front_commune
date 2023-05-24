@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hook";
-import { useGetCommuneOfDepartement, useGetCommuneOfRegion, useGetDepartementsOfRegion } from "../../../../api/maille";
+import { useGetCommuneOfDepartement, useGetDepartementsOfRegion } from "../../../../api/maille";
+import { MdOpenInFull, MdOutlineCloseFullscreen } from "react-icons/md";
 import CreateChart from "../../../../componants_main/Chart/createChart";
 import { useGetAllMailles, useGetMaillesLevels } from "../../../../api/maillage";
 import { ControleMaille } from "../../../../api/api.type";
@@ -18,8 +19,6 @@ const SideBarInfo = () => {
 	const [choix, setChoix] = useState<string>(currentZone.level);
 	const [clickMaille, setClickMaille] = useState<object>({});
 	const dispatch = useAppDispatch();
-
-	const [communes, setCommunes] = useState<object[]>([]);
 
 	// TODO : fix niveau back pour faire tout sur une requete
 	const listMailles = useGetAllMailles({
@@ -48,15 +47,37 @@ const SideBarInfo = () => {
 	const data_stats = usePostDataStats({ code_communes: ["e", "z"], isEnable: filtre === "demographie" });
 	const data_scolaire = usePostDataScolaire({ code_communes: ["e", "z"], isEnable: filtre === "scolaire" });
 	const data_entity = usePostEntity({ code_communes: ["e", "z"], isEnable: filtre === "entity" });
-	const handleClick = (item: string) => {
-		setChoix(item);
+
+	console.log(currentZone);
+
+	const departementOfRegion = useGetDepartementsOfRegion({
+		code_region: currentZone.code,
+		isEnable: currentZone.level === "region",
+	});
+	const listCodeDepartement = departementOfRegion.data?.map((item: { code: string }) => item.code);
+	console.log(listCodeDepartement);
+
+	const communeOfDepartement = useGetCommuneOfDepartement({
+		code_departement: listCodeDepartement ? listCodeDepartement[0] : "84",
+		isEnable: currentZone.level === "region",
+	});
+	console.log(communeOfDepartement.data);
+
+	const itemCommune = useGetCommuneOfDepartement({
+		code_departement: currentZone.code,
+		isEnable: currentZone.level === "departement",
+	});
+
+	const handleClick = (item) => {
+		if (clickMaille === item) setClickMaille({});
+		else setClickMaille(item);
 	};
 
 	return (
 		<div id="sideBarRight">
 			<div className="top-button">
-				<button onClick={() => handleClick(currentZone.level)}>{currentZone.level}</button>
-				<button onClick={() => handleClick(mailleInf)}>{mailleInf}</button>
+				<button onClick={() => setChoix(currentZone.level)}>{currentZone.level}</button>
+				<button onClick={() => setChoix(mailleInf)}>{mailleInf}</button>
 			</div>
 			<div className="content">
 				{choix === currentZone.level ? (
@@ -66,8 +87,16 @@ const SideBarInfo = () => {
 				) : (
 					<div className="list-maille">
 						{listMailles.data?.map((item: { code: string; libelle: string }) => (
-							<div className="item" onClick={() => setClickMaille(item)}>
-								<span>{item.libelle}</span>
+							<div className="item" onClick={() => handleClick(item)}>
+								<span>
+									<p>{item.libelle}</p>
+
+									{clickMaille === item ? (
+										<MdOutlineCloseFullscreen></MdOutlineCloseFullscreen>
+									) : (
+										<MdOpenInFull></MdOpenInFull>
+									)}
+								</span>
 								<div className={clickMaille === item ? "display" : "cache"}>
 									<CreateChart typeChart="bar" />
 								</div>
