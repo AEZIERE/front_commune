@@ -10,7 +10,7 @@ import SelectedButton from "./componants/SelectedButton";
 
 const HomePage = () => {
 	return (
-		<div>
+		<div id="map">
 			<NavBar />
 			<div id="content">
 				<SideBarFilter />
