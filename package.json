@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@projectstorm/react-diagrams": "^7.0.2",
     "@reduxjs/toolkit": "^1.9.3",
     "axios": "^1.3.5",
     "chart.js": "^4.3.0",
@@ -25,6 +26,7 @@
     "react-query": "^3.39.3",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.1",
+    "react-svg": "^16.1.13",
     "react-use": "^17.4.0",
     "redux-persist": "^6.0.0",
     "sass": "^1.62.0",
