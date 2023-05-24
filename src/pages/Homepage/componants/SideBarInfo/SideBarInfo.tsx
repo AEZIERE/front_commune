@@ -68,43 +68,62 @@ const SideBarInfo = () => {
 		isEnable: currentZone.level === "departement",
 	});
 
-	const handleClick = (item) => {
+	const handleClick = (item: object) => {
 		if (clickMaille === item) setClickMaille({});
 		else setClickMaille(item);
 	};
 
+	const handleClickReset = () => {
+		dispatch({ type: "mapState/setSelectedZone", payload: { name: "", code: "", level: "" } });
+	};
+
 	return (
 		<div id="sideBarRight">
-			<div className="top-button">
-				<button onClick={() => setChoix(currentZone.level)}>{currentZone.level}</button>
-				<button onClick={() => setChoix(mailleInf)}>{mailleInf}</button>
-			</div>
-			<div className="content">
-				{choix === currentZone.level ? (
-					<div>
-						<CreateChart typeChart="bar" />
+			{selectedZone.name === "" ? (
+				<div>
+					<div className="top-button">
+						<button onClick={() => setChoix(currentZone.level)}>{currentZone.level}</button>
+						<button onClick={() => setChoix(mailleInf)}>{mailleInf}</button>
 					</div>
-				) : (
-					<div className="list-maille">
-						{listMailles.data?.map((item: { code: string; libelle: string }) => (
-							<div className="item" onClick={() => handleClick(item)}>
-								<span>
-									<p>{item.libelle}</p>
-
-									{clickMaille === item ? (
-										<MdOutlineCloseFullscreen></MdOutlineCloseFullscreen>
-									) : (
-										<MdOpenInFull></MdOpenInFull>
-									)}
-								</span>
-								<div className={clickMaille === item ? "display" : "cache"}>
-									<CreateChart typeChart="bar" />
-								</div>
+					<div className="content">
+						<span>Filtre données : {filtre}</span>
+						{choix === currentZone.level ? (
+							<div className="infoMaillePrincipal">
+								<CreateChart typeChart="bar" />
 							</div>
-						))}
+						) : (
+							<div className="list-mailles">
+								{listMailles.data?.map((item: { code: string; libelle: string }) => (
+									<div className="item" onClick={() => handleClick(item)}>
+										<span>
+											<p>{item.libelle}</p>
+
+											{clickMaille === item ? (
+												<MdOutlineCloseFullscreen></MdOutlineCloseFullscreen>
+											) : (
+												<MdOpenInFull></MdOpenInFull>
+											)}
+										</span>
+										<div className={clickMaille === item ? "display" : "cache"}>
+											<CreateChart typeChart="bar" />
+										</div>
+									</div>
+								))}
+							</div>
+						)}
 					</div>
-				)}
-			</div>
+				</div>
+			) : (
+				<div>
+					<div className="top-button">
+						<button onClick={handleClickReset}>reset select</button>
+					</div>
+					<div className="content">
+						<span>Filtre données : {filtre}</span>
+						Charts // données
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };
