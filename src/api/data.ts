@@ -41,3 +41,25 @@ export const usePostData = ({
 		{ enabled: isEnable }
 	);
 };
+
+export const useGetDataOfMaille = ({
+	name_table,
+	code,
+	niveau,
+	isEnable = true,
+}: {
+	code: string;
+	niveau: string;
+	name_table: enumNameTable;
+	isEnable: boolean;
+}) => {
+	const api = useAxiosApiCommune();
+	return useQuery<GetData[]>(
+		["useGetDataOfMaille", code, name_table, niveau],
+		async () => {
+			const { data } = await api.get(`maille/data?nameTable=${name_table}&code=${code}&niveau=${niveau}`);
+			return data;
+		},
+		{ enabled: isEnable }
+	);
+};

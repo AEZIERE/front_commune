@@ -4,11 +4,34 @@ import { useGetCommuneOfDepartement, useGetDepartementsOfRegion } from "../../..
 import { MdOpenInFull, MdOutlineCloseFullscreen } from "react-icons/md";
 import CreateChart from "../../../../componants_main/Chart/createChart";
 import { useGetAllMailles, useGetMaillesLevels } from "../../../../api/maillage";
-import { ControleMaille } from "../../../../api/api.type";
+import { ControleMaille, GetData } from "../../../../api/api.type";
 import "./SideBarInfo.scss";
 import { usePostDataStats } from "../../../../api/data_stats";
 import { usePostDataScolaire } from "../../../../api/data_scolaire";
 import { usePostEntity } from "../../../../api/entity";
+import { useGetDataOfMaille } from "../../../../api/data";
+import { enumNameTable } from "../../../../api/utils";
+
+const getCommunes = (currentZone: { code: any; level: string; name: string }) => {
+	const departementOfRegion = useGetDepartementsOfRegion({
+		code_region: currentZone.code,
+		isEnable: currentZone.level === "region",
+	});
+	const listCodeDepartement = departementOfRegion.data?.map((item: { code: string }) => item.code);
+	console.log(listCodeDepartement);
+
+	const communeOfDepartement = useGetCommuneOfDepartement({
+		code_departement: listCodeDepartement ? listCodeDepartement[0] : "84",
+		isEnable: currentZone.level === "region",
+	});
+	console.log(communeOfDepartement.data);
+
+	const itemCommune = useGetCommuneOfDepartement({
+		code_departement: currentZone.code,
+		isEnable: currentZone.level === "departement",
+	});
+	return itemCommune.data;
+};
 
 const SideBarInfo = () => {
 	const { selectedZone, currentZone } = useAppSelector((state) => state.mapState);
@@ -48,25 +71,20 @@ const SideBarInfo = () => {
 	const data_scolaire = usePostDataScolaire({ code_communes: ["e", "z"], isEnable: filtre === "scolaire" });
 	const data_entity = usePostEntity({ code_communes: ["e", "z"], isEnable: filtre === "entity" });
 
-	console.log(currentZone);
-
-	const departementOfRegion = useGetDepartementsOfRegion({
-		code_region: currentZone.code,
-		isEnable: currentZone.level === "region",
+	const data_demo = useGetDataOfMaille({
+		name_table: enumNameTable.demographie,
+		code: currentZone.code,
+		niveau: currentZone.level,
+		isEnable: filtre === "demographie" && currentZone.code !== "",
 	});
-	const listCodeDepartement = departementOfRegion.data?.map((item: { code: string }) => item.code);
-	console.log(listCodeDepartement);
-
-	const communeOfDepartement = useGetCommuneOfDepartement({
-		code_departement: listCodeDepartement ? listCodeDepartement[0] : "84",
-		isEnable: currentZone.level === "region",
+	const data_eta = useGetDataOfMaille({
+		name_table: enumNameTable.etablissement_scolaires,
+		code: currentZone.code,
+		niveau: currentZone.level,
+		isEnable: filtre === "education" && currentZone.code !== "",
 	});
-	console.log(communeOfDepartement.data);
-
-	const itemCommune = useGetCommuneOfDepartement({
-		code_departement: currentZone.code,
-		isEnable: currentZone.level === "departement",
-	});
+	console.log(data_eta.data);
+	console.log(data_demo.data);
 
 	const handleClick = (item: object) => {
 		if (clickMaille === item) setClickMaille({});
