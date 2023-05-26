@@ -73,18 +73,18 @@ const SideBarInfo = () => {
 
 	const data_demo = useGetDataOfMaille({
 		name_table: enumNameTable.demographie,
-		code: currentZone.code,
-		niveau: currentZone.level,
-		isEnable: filtre === "demographie" && currentZone.code !== "",
+		code: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.code : currentZone.code,
+		niveau: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.level : currentZone.level,
+		isEnable: filtre === "demographie" && (currentZone.code !== "" || selectedZone.code !== ""),
 	});
 	const data_eta = useGetDataOfMaille({
-		name_table: enumNameTable.etablissement_scolaires,
-		code: currentZone.code,
-		niveau: currentZone.level,
-		isEnable: filtre === "education" && currentZone.code !== "",
+		name_table: enumNameTable.etablissements_scolaires,
+		code: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.code : currentZone.code,
+		niveau: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.level : currentZone.level,
+		isEnable: filtre === "education" && (currentZone.code !== "" || selectedZone.code !== ""),
 	});
-	console.log(data_eta.data);
-	console.log(data_demo.data);
+	console.log(data_eta);
+	console.log(data_demo);
 
 	const handleClick = (item: object) => {
 		if (clickMaille === item) setClickMaille({});
