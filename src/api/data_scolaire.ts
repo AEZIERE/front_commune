@@ -11,17 +11,19 @@ export const useGetDataScolaire = (code_commune: string) => {
 };
 
 export const usePostDataScolaire = ({
-	code_communes,
+	code,
+	niveau,
 	isEnable = true,
 }: {
-	code_communes: string[];
+	code: string;
+	niveau: string;
 	isEnable: boolean;
 }) => {
 	const api = useAxiosApiCommune();
 	return useQuery<GetScolaire[]>(
-		["usePostDataScolaire", code_communes],
+		["usePostDataScolaire", code, niveau],
 		async () => {
-			const { data } = await api.post(`data_scolaire/`, { code_commune: code_communes });
+			const { data } = await api.post(`data/scolaire/all?code=${code}&niveau=${niveau}`);
 			return data;
 		},
 		{
@@ -30,34 +32,40 @@ export const usePostDataScolaire = ({
 	);
 };
 
-export const useGetDataScolairePro = (code_commune: string) => {
+export const useGetDataScolairePro = ({
+	code,
+	niveau,
+	isEnable = true,
+}: {
+	code: string;
+	niveau: string;
+	isEnable: boolean;
+}) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetScolaire[]>(["useGetDataScolairePro", code_commune], async () => {
-		const { data } = await api.get(`data_scolaire_pro/${code_commune}`);
-		return data;
-	});
+	return useQuery<GetScolaire[]>(
+		["useGetDataScolairePro", code, niveau],
+		async () => {
+			const { data } = await api.get(`data/scolaire/sup?code=${code}&niveau=${niveau}`);
+			return data;
+		},
+		{
+			enabled: isEnable,
+		}
+	);
 };
 
-export const usePostDataScolairePro = (code_communes: string[]) => {
+export const useGetDataScolaireSup = ({
+	code,
+	niveau,
+	isEnable = true,
+}: {
+	code: string;
+	niveau: string;
+	isEnable: boolean;
+}) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetScolaire[]>(["usePostDataScolairePro", code_communes], async () => {
-		const { data } = await api.post(`data_scolaire_pro/`, { code_commune: code_communes });
-		return data;
-	});
-};
-
-export const useGetDataScolaireSup = (code_commune: string) => {
-	const api = useAxiosApiCommune();
-	return useQuery<GetScolaire[]>(["useGetDataScolairePro", code_commune], async () => {
-		const { data } = await api.get(`data_scolaire_sup/${code_commune}`);
-		return data;
-	});
-};
-
-export const usePostDataScolaireSup = (code_communes: string[]) => {
-	const api = useAxiosApiCommune();
-	return useQuery<GetScolaire[]>(["usePostDataScolairePro", code_communes], async () => {
-		const { data } = await api.post(`data_scolaire_sup/`, { code_commune: code_communes });
+	return useQuery<GetScolaire[]>(["useGetDataScolairePro", code, niveau], async () => {
+		const { data } = await api.get(`data/scolaire/pro?code=${code}&niveau=${niveau}`);
 		return data;
 	});
 };

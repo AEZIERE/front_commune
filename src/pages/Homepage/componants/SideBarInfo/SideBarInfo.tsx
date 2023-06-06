@@ -6,9 +6,9 @@ import CreateChart from "../../../../componants_main/Chart/createChart";
 import { useGetAllMailles, useGetMaillesLevels } from "../../../../api/maillage";
 import { ControleMaille, GetData } from "../../../../api/api.type";
 import "./SideBarInfo.scss";
-import { usePostDataStats } from "../../../../api/data_stats";
+
 import { usePostDataScolaire } from "../../../../api/data_scolaire";
-import { usePostEntity } from "../../../../api/entity";
+
 import { useGetDataOfMaille } from "../../../../api/data";
 import { enumNameTable } from "../../../../api/utils";
 
@@ -67,9 +67,6 @@ const SideBarInfo = () => {
 				break;
 		}
 	}, [currentZone]);
-	const data_stats = usePostDataStats({ code_communes: ["e", "z"], isEnable: filtre === "demographie" });
-	const data_scolaire = usePostDataScolaire({ code_communes: ["e", "z"], isEnable: filtre === "scolaire" });
-	const data_entity = usePostEntity({ code_communes: ["e", "z"], isEnable: filtre === "entity" });
 
 	const data_demo = useGetDataOfMaille({
 		name_table: enumNameTable.demographie,

@@ -1,13 +1,13 @@
 import React from "react";
 import "./Product.scss";
-import Schema from "./componants/Schema/Schema";
+import TreeMap from "./componants/TreeMap/TreeMap_recharts";
 
 const Product = () => {
 	return (
 		<div id="product">
 			<div id="navBar">navBar</div>
 			<div id="content">
-				<Schema />
+				<TreeMap />
 			</div>
 			<div id="footBar">footBar</div>
 		</div>
