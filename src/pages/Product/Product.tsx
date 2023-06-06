@@ -1,6 +1,6 @@
 import React from "react";
 import "./Product.scss";
-import TreeMap from "./componants/TreeMap/TreeMap_recharts";
+import TreeMap from "./componants/TreeMap/TreMap";
 
 const Product = () => {
 	return (
