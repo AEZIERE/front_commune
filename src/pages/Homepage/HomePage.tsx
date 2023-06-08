@@ -4,7 +4,7 @@ import SideBarFilter from "./componants/SideBarFilter/sideBarFilter";
 import Map from "./componants/Map/MapReact";
 import NavBar from "../../componants_main/NavBar/NavBar";
 import SwitchPages from "../../componants_main/switchPages";
-import BarChart from "../../componants_main/Chart/createChart";
+import BarChart from "../../componants_main/DisplayData/createChart";
 import SideBarInfo from "./componants/SideBarInfo/SideBarInfo";
 import SelectedButton from "./componants/SelectedButton";
 

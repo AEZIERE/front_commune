@@ -1,16 +1,28 @@
 import { useQuery } from "react-query";
 import { useAxiosApiCommune } from "./utils";
-import { GetGeo, GetScolaire } from "./api.type";
+import { GetScolaire } from "./api.type";
 
-export const useGetDataScolaire = (code_commune: string) => {
+export const useGetDataScolaire = ({
+	code,
+	niveau,
+	isEnable = true,
+}: {
+	code: string;
+	niveau: string;
+	isEnable: boolean;
+}) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetScolaire[]>(["useGetDataStats", code_commune], async () => {
-		const { data } = await api.get(`data_scolaire/${code_commune}`);
-		return data;
-	});
+	return useQuery<[]>(
+		["useGetDataScolaire", code, niveau],
+		async () => {
+			const { data } = await api.get(`data/scolaire/all?code=${code}&niveau=${niveau}`);
+			return data;
+		},
+		{ enabled: isEnable }
+	);
 };
 
-export const usePostDataScolaire = ({
+export const useGetDataScolaireSup = ({
 	code,
 	niveau,
 	isEnable = true,
@@ -21,9 +33,9 @@ export const usePostDataScolaire = ({
 }) => {
 	const api = useAxiosApiCommune();
 	return useQuery<GetScolaire[]>(
-		["usePostDataScolaire", code, niveau],
+		["useGetDataScolaireSup", code, niveau],
 		async () => {
-			const { data } = await api.post(`data/scolaire/all?code=${code}&niveau=${niveau}`);
+			const { data } = await api.get(`data/scolaire/sup?code=${code}&niveau=${niveau}`);
 			return data;
 		},
 		{
@@ -42,19 +54,13 @@ export const useGetDataScolairePro = ({
 	isEnable: boolean;
 }) => {
 	const api = useAxiosApiCommune();
-	return useQuery<GetScolaire[]>(
-		["useGetDataScolairePro", code, niveau],
-		async () => {
-			const { data } = await api.get(`data/scolaire/sup?code=${code}&niveau=${niveau}`);
-			return data;
-		},
-		{
-			enabled: isEnable,
-		}
-	);
+	return useQuery<GetScolaire[]>(["useGetDataScolairePro", code, niveau], async () => {
+		const { data } = await api.get(`data/scolaire/pro?code=${code}&niveau=${niveau}`);
+		return data;
+	});
 };
 
-export const useGetDataScolaireSup = ({
+export const useGetStatsScolaireSup = ({
 	code,
 	niveau,
 	isEnable = true,
@@ -65,7 +71,7 @@ export const useGetDataScolaireSup = ({
 }) => {
 	const api = useAxiosApiCommune();
 	return useQuery<GetScolaire[]>(["useGetDataScolairePro", code, niveau], async () => {
-		const { data } = await api.get(`data/scolaire/pro?code=${code}&niveau=${niveau}`);
+		const { data } = await api.get(`stats/scolaire/sup?code=${code}&niveau=${niveau}`);
 		return data;
 	});
 };

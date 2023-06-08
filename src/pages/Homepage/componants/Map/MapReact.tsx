@@ -14,7 +14,6 @@ const MapReact = () => {
 	const [center, setCenter] = useState<LatLngExpression>();
 	const { selectedZone, currentZone } = useAppSelector((state) => state.mapState);
 	const dispatch = useAppDispatch();
-	console.log("currentZone", currentZone);
 
 	const setZoom = (level: ControleMaille) => {
 		if (level === ControleMaille.nation) {

@@ -2,15 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hook";
 import { useGetCommuneOfDepartement, useGetDepartementsOfRegion } from "../../../../api/maille";
 import { MdOpenInFull, MdOutlineCloseFullscreen } from "react-icons/md";
-import CreateChart from "../../../../componants_main/Chart/createChart";
+import CreateChart from "../../../../componants_main/DisplayData/createChart";
 import { useGetAllMailles, useGetMaillesLevels } from "../../../../api/maillage";
 import { ControleMaille, GetData } from "../../../../api/api.type";
 import "./SideBarInfo.scss";
 
-import { usePostDataScolaire } from "../../../../api/data_scolaire";
-
 import { useGetDataOfMaille } from "../../../../api/data";
 import { enumNameTable } from "../../../../api/utils";
+import { useGetDataDemograpgieOfMaille } from "../../../../api/demographie";
+import { use } from "echarts";
+import Tableau from "../../../../componants_main/DisplayData/Tableau";
+import { useGetDataCompanyOfMaille } from "../../../../api/company";
+import { useGetDataScolaire, useGetStatsScolaireSup } from "../../../../api/data_scolaire";
+
+type dataChart = { title: string; names: string[]; value: undefined };
 
 const getCommunes = (currentZone: { code: any; level: string; name: string }) => {
 	const departementOfRegion = useGetDepartementsOfRegion({
@@ -37,7 +42,9 @@ const SideBarInfo = () => {
 	const { selectedZone, currentZone } = useAppSelector((state) => state.mapState);
 	const filtre = useAppSelector((state) => state.filter.value);
 	const [mailleInf, setMailleInf] = useState<string>("");
-	const [listeRoute, setListeRoute] = useState<[]>([]);
+	const [listeRoute, setListeRoute] = useState([]);
+
+	const [listData, setListData] = useState<dataChart[]>([]);
 
 	const [choix, setChoix] = useState<string>(currentZone.level);
 	const [clickMaille, setClickMaille] = useState<object>({});
@@ -68,20 +75,85 @@ const SideBarInfo = () => {
 		}
 	}, [currentZone]);
 
-	const data_demo = useGetDataOfMaille({
-		name_table: enumNameTable.demographie,
-		code: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.code : currentZone.code,
-		niveau: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.level : currentZone.level,
-		isEnable: filtre === "demographie" && (currentZone.code !== "" || selectedZone.code !== ""),
-	});
-	const data_eta = useGetDataOfMaille({
-		name_table: enumNameTable.etablissements_scolaires,
-		code: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.code : currentZone.code,
-		niveau: selectedZone.code !== "" || currentZone.code !== "" ? selectedZone.level : currentZone.level,
-		isEnable: filtre === "education" && (currentZone.code !== "" || selectedZone.code !== ""),
-	});
-	console.log(data_eta);
-	console.log(data_demo);
+	const data_api_demographie = useGetDataDemograpgieOfMaille({
+		code: selectedZone.code !== "" ? selectedZone.code : currentZone.code,
+		niveau: selectedZone.code !== "" ? selectedZone.level : currentZone.level,
+		isEnable: filtre === "demographie",
+	}).data;
+
+	const data_api_industrie = useGetDataCompanyOfMaille({
+		code: selectedZone.code !== "" ? selectedZone.code : currentZone.code,
+		niveau: selectedZone.code !== "" ? selectedZone.level : currentZone.level,
+		isEnable: filtre === "industie",
+	}).data;
+
+	const data_api_scolaire = useGetStatsScolaireSup({
+		code: selectedZone.code !== "" ? selectedZone.code : currentZone.code,
+		niveau: selectedZone.code !== "" ? selectedZone.level : currentZone.level,
+		isEnable: filtre === "scolaire",
+	}).data;
+
+	useEffect(() => {
+		console.log(filtre);
+
+		switch (filtre) {
+			case "demographie":
+				if (!data_api_demographie) break;
+				console.log("demographie");
+				const data_demo = {
+					title: "Démographie",
+					names: ["deces", "menage", "population", "naissances"],
+					value: data_api_demographie.demographie[0],
+				};
+				const data_logement = {
+					title: "Logement",
+					names: ["appartement", "logement", "logement_vac", "maison", "residence_sec", "residence_p"],
+					value: data_api_demographie.logement[0],
+				};
+				const data_chomage = {
+					title: "Chomage",
+					names: [],
+					value: data_api_demographie.chomage,
+				};
+				const data_emploi = {
+					title: "Emploi",
+					names: ["chomeurs", "emploi_total", "sphere_presentielle", "sphere_productive"],
+					value: data_api_demographie.emploi[0],
+				};
+				setListData([data_demo, data_logement, data_emploi]);
+
+				break;
+			case "industie":
+				if (!data_api_industrie) break;
+				console.log("industrie");
+
+				const data_entreprise_etablissement = {
+					title: "Entreprise et établissement",
+					names: [],
+					value: data_api_industrie.entreprise_etablissement,
+				};
+				const name_banned = ["id_maille", "code_commune", "annee", "code"];
+
+				const data_salaire = {
+					title: "Salaire",
+					names: Object.keys(data_api_industrie.salaire[0]).filter((item) => !name_banned.includes(item)),
+					value: data_api_industrie.salaire[0],
+				};
+				const data_entreprise = {
+					title: "Entreprise",
+					names: Object.keys(data_api_industrie.entreprise[0] ?? []).filter((item) => !name_banned.includes(item)),
+					value: data_api_industrie.entreprise[0],
+				};
+				setListData([data_salaire, data_entreprise]);
+				break;
+			case "scolaire":
+				if (!data_api_scolaire) break;
+				const label = ["formation", "insertion", "diplome"];
+				// Handle the default case if needed
+				break;
+		}
+		console.log(listData);
+	}, [filtre, currentZone, data_api_demographie, data_api_industrie, selectedZone]);
 
 	const handleClick = (item: object) => {
 		if (clickMaille === item) setClickMaille({});
@@ -90,6 +162,11 @@ const SideBarInfo = () => {
 
 	const handleClickReset = () => {
 		dispatch({ type: "mapState/setSelectedZone", payload: { name: "", code: "", level: "" } });
+	};
+
+	const [typeDisplay, setTypeDisplay] = useState("charts");
+	const handleClickDisplayType = (type: string) => {
+		setTypeDisplay(type);
 	};
 
 	return (
@@ -135,7 +212,12 @@ const SideBarInfo = () => {
 					</div>
 					<div className="content">
 						<span>Filtre données : {filtre}</span>
-						Charts // données
+						<button onClick={() => handleClickDisplayType("charts")}>Charts</button>
+						<button onClick={() => handleClickDisplayType("tableau")}>Tableaux</button>
+						{typeDisplay === "tableau" && listData.map((item: any) => <Tableau data={item} />)}
+						{typeDisplay === "charts" &&
+							listData.map((item: any) => <CreateChart key={item.title} typeChart="bar" data={item} />)}
+						{listData.length}
 					</div>
 				</div>
 			)}

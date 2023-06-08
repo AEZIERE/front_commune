@@ -11,7 +11,7 @@ const SideBarFilter: React.FC = () => {
 
 	const className = `list_button${isPanelOpen ? "--expanded" : ""}`;
 
-	const list_bouton = ["industie", "education", "demographie", "e", "industrie", "industrie", "industrie"];
+	const list_bouton = ["industie", "scolaire", "demographie"];
 
 	const handlePanelToggle = () => {
 		setIsPanelOpen(!isPanelOpen);

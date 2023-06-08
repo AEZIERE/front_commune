@@ -41,18 +41,21 @@ const Road = () => {
 				{ nom: infoMailles.data?.libelleCommune, code: infoMailles.data?.codeCommune, level: "commune" },
 			]);
 		}
-
-		console.log(infoMailles);
 	}, [infoMailles.data, currentZone]);
 
 	const handleClick = (item: { nom: string; code: string; level: string }) => {
 		dispatch({ type: "mapState/setCurrentZone", payload: { name: item.nom, code: item.code, level: item.level } });
+		dispatch({ type: "mapState/setSelectedZone", payload: { name: "", code: "", level: "" } });
 	};
 
 	return (
 		<div id="road">
 			{list.map((item) => (
-				<span onClick={() => handleClick(item)} className={item.level === currentZone.level ? "IsLevel" : ""}>
+				<span
+					key={item.nom + item.level}
+					onClick={() => handleClick(item)}
+					className={item.level === currentZone.level ? "IsLevel" : ""}
+				>
 					{" - "} {item.nom} {item.code} {item.level}
 				</span>
 			))}
