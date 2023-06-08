@@ -1,5 +1,12 @@
 import React from "react";
 
+const pieData = [
+	{ name: "Group A", value: 400 },
+	{ name: "Group B", value: 300 },
+	{ name: "Group C", value: 300 },
+	{ name: "Group D", value: 200 },
+];
+
 const data = [
 	{
 		name: "axis",
@@ -52,14 +59,46 @@ const data = [
 	},
 ];
 
-import { PureComponent } from "react";
-import { Treemap, ResponsiveContainer } from "recharts";
+import { Treemap, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 const MyTreeMap = () => {
+	const CustomizedContent = (props) => {
+		const { root, depth, x, y, width, height, index, payload } = props;
+
+		if (depth === 1) {
+			return (
+				<g>
+					<rect
+						x={x}
+						y={y}
+						width={width}
+						height={height}
+						fill="#00000"
+						stroke="#fff"
+						strokeWidth={2 / (depth + 1e-10)}
+						strokeOpacity={1 / (depth + 1e-10)}
+					/>
+					<text x={x + width / 2} y={y + height / 2 + 7} textAnchor="middle" fill="#fff" fontSize={14}></text>
+					<PieChart width={width} height={height} style={{ position: "absolute", left: x, top: y }}>
+						<Pie
+							data={pieData}
+							dataKey="value"
+							innerRadius={0}
+							outerRadius={Math.min(width, height) / 2}
+							paddingAngle={5}
+							label={(entry) => entry.name}
+						></Pie>
+					</PieChart>
+				</g>
+			);
+		}
+
+		return null;
+	};
 	return (
-		<div>
-			<ResponsiveContainer width="100%" height="100%">
-				<Treemap width={400} height={200} data={data} dataKey="size" stroke="#fff" fill="#8884d8" />
+		<div style={{ width: "100%", height: "400px" }}>
+			<ResponsiveContainer>
+				<Treemap data={data} dataKey="size" stroke="#fff" fill="#8884d8" content={<CustomizedContent />} />
 			</ResponsiveContainer>
 		</div>
 	);

@@ -1,34 +1,23 @@
 import React from "react";
 import ReactEcharts from "echarts-for-react";
+import CreateChart from "../../../../componants_main/Chart/createChart";
 
 const getLevelOption = () => {
 	return [
 		{
 			itemStyle: {
-				borderColor: "#777",
 				borderWidth: 0,
-				gapWidth: 1,
-			},
-			upperLabel: {
-				show: false,
+				gapWidth: 5,
 			},
 		},
 		{
 			itemStyle: {
-				borderColor: "#555",
-				borderWidth: 5,
 				gapWidth: 1,
-			},
-			emphasis: {
-				itemStyle: {
-					borderColor: "#ddd",
-				},
 			},
 		},
 		{
 			colorSaturation: [0.35, 0.5],
 			itemStyle: {
-				borderWidth: 5,
 				gapWidth: 1,
 				borderColorSaturation: 0.6,
 			},
@@ -93,32 +82,18 @@ const TreMap = () => {
 			text: "Disk Usage",
 			left: "center",
 		},
-		tooltip: {
-			formatter: function (info) {
-				var value = info.value;
-				var treePathInfo = info.treePathInfo;
-				var treePath = [];
-				for (var i = 1; i < treePathInfo.length; i++) {
-					treePath.push(treePathInfo[i].name);
-				}
-				return [
-					'<div class="tooltip-title">' + echarts.format.encodeHTML(treePath.join("/")) + "</div>",
-					"Disk Usage: " + echarts.format.addCommas(value) + " KB",
-				].join("");
-			},
-		},
 		series: [
 			{
-				name: "Test",
+				name: "Disk Usage",
 				type: "treemap",
 				visibleMin: 300,
 				label: {
 					show: true,
-					formatter: "{b}",
-				},
-				upperLabel: {
-					show: true,
-					height: 30,
+					formatter: function (params) {
+						console.log(params);
+
+						return params.name + "\n" + params.value;
+					},
 				},
 				itemStyle: {
 					borderColor: "#fff",
